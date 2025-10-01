@@ -1,0 +1,3 @@
+module grepUtil
+
+go 1.24.5
