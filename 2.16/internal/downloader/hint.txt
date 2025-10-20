@@ -1,0 +1,102 @@
+
+
+// import (
+//     "fmt"
+//     "io"
+//     "net/http"
+//     "net/url"
+//     "os"
+//     "path"
+//     "strings"
+
+//     "github.com/PuerkitoBio/goquery"
+// )
+
+// func downloadFile(fileURL, dir string) (string, error) {
+//     resp, err := http.Get(fileURL)
+//     if err != nil {
+//         return "", err
+//     }
+//     defer resp.Body.Close()
+
+//     u, err := url.Parse(fileURL)
+//     if err != nil {
+//         return "", err
+//     }
+
+//     filename := path.Base(u.Path)
+//     localPath := path.Join(dir, filename)
+
+//     out, err := os.Create(localPath)
+//     if err != nil {
+//         return "", err
+//     }
+//     defer out.Close()
+
+//     _, err = io.Copy(out, resp.Body)
+//     if err != nil {
+//         return "", err
+//     }
+
+//     return filename, nil
+// }
+
+// func main() {
+//     pageURL := "https://example.com"
+//     outDir := "saved_page"
+
+//     os.MkdirAll(outDir, os.ModePerm)
+
+//     resp, err := http.Get(pageURL)
+//     if err != nil {
+//         panic(err)
+//     }
+//     defer resp.Body.Close()
+
+//     doc, err := goquery.NewDocumentFromReader(resp.Body)
+//     if err != nil {
+//         panic(err)
+//     }
+
+//     base, _ := url.Parse(pageURL)
+
+//     // Скачать изображения, CSS и JS
+//     doc.Find("img,link[rel='stylesheet'],script[src]").Each(func(i int, s *goquery.Selection) {
+//         var src string
+//         if val, exists := s.Attr("src"); exists {
+//             src = val
+//         } else if val, exists := s.Attr("href"); exists {
+//             src = val
+//         }
+
+//         if src == "" {
+//             return
+//         }
+
+//         absURL := src
+//         if !strings.HasPrefix(src, "http") {
+//             absURL = base.ResolveReference(&url.URL{Path: src}).String()
+//         }
+
+//         filename, err := downloadFile(absURL, outDir)
+//         if err != nil {
+//             fmt.Println("Ошибка при загрузке:", err)
+//             return
+//         }
+
+//         // Обновляем путь в HTML
+//         if s.Is("img") {
+//             s.SetAttr("src", filename)
+//         } else if s.Is("link") {
+//             s.SetAttr("href", filename)
+//         } else if s.Is("script") {
+//             s.SetAttr("src", filename)
+//         }
+//     })
+
+//     // Сохраняем обновлённый HTML
+//     html, _ := doc.Html()
+//     os.WriteFile(path.Join(outDir, "index.html"), []byte(html), 0644)
+
+//     fmt.Println("Страница сохранена в папке:", outDir)
+// }
