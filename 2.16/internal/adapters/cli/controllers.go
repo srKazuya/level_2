@@ -21,6 +21,7 @@ type Handler struct {
 func NewHandler(service downloader.Service) *Handler {
 	return &Handler{service: service}
 }
+
 func (h *Handler) HandleCommand(tokens []string) error {
 	fs := pflag.NewFlagSet("wget", pflag.ContinueOnError)
 	r := fs.BoolP("recursive", "r", false, "recursive downloading")

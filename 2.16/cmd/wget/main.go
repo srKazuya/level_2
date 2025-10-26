@@ -26,7 +26,7 @@ func main() {
 	handler := cli.NewHandler(service)            // CLI слой
 
 	in := bufio.NewReader(os.Stdin)
-	
+
 	for {
 		fmt.Println("Введите флаги и ссылку (<flag> <https://...>)")
 		fmt.Print("wget-> ")
